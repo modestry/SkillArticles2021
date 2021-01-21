@@ -28,7 +28,8 @@ class UnorderedListSpan(
     ) {
         // only for the first line draw bullet
         if(isFirstLine) {
-           paint.withCustomColor {
+            val oldColor = paint.color
+            paint.withCustomColor {
                 canvas.drawCircle(
                     gapWidth + currentMarginLocation + bulletRadius,
                     (lineTop + lineBottom)/2f,
