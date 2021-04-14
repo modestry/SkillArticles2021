@@ -21,6 +21,7 @@ class Bottombar @JvmOverloads constructor(
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
 ) : ConstraintLayout(context, attrs, defStyleAttr), CoordinatorLayout.AttachedBehavior {
+
     var isSearchMode = false
 
     override fun getBehavior(): CoordinatorLayout.Behavior<Bottombar> {
@@ -37,6 +38,8 @@ class Bottombar @JvmOverloads constructor(
     //save state
     override fun onSaveInstanceState(): Parcelable? {
         val savedState = SavedState(super.onSaveInstanceState())
+        savedState.ssTranslationY = translationY
+        //search
         savedState.ssIsSearchMode = isSearchMode
         return savedState
     }
@@ -45,76 +48,82 @@ class Bottombar @JvmOverloads constructor(
     override fun onRestoreInstanceState(state: Parcelable) {
         super.onRestoreInstanceState(state)
         if (state is SavedState) {
+            translationY = state.ssTranslationY
+            // search
             isSearchMode = state.ssIsSearchMode
             reveal.isVisible = isSearchMode
             group_bottom.isVisible = !isSearchMode
+
         }
     }
 
     fun setSearchState(search: Boolean) {
-        if (isSearchMode == search || !isAttachedToWindow) return
+        if(isSearchMode == search || !isAttachedToWindow) return
         isSearchMode = search
-        if (isSearchMode) animateShowSearchPanel()
+        if(isSearchMode) animateShowSearchPanel()
         else animateHideSearchPanel()
     }
 
     private fun animateHideSearchPanel() {
         group_bottom.isVisible = true
-        val endRadius = hypot(width.toFloat(), height / 2f)
+        val endRadius = hypot(width.toFloat(), height/2f)
         val va = ViewAnimationUtils.createCircularReveal(
             reveal,
             width,
-            height / 2,
+            height/2,
             endRadius,
             0f
         )
-        va.doOnEnd { reveal.isVisible = false }
+        va.doOnEnd { reveal.isVisible = false}
         va.start()
     }
 
     private fun animateShowSearchPanel() {
         reveal.isVisible = true
-        val endRadius = hypot(width.toFloat(), height / 2f)
+        val endRadius = hypot(width.toFloat(), height/2f)
         val va = ViewAnimationUtils.createCircularReveal(
             reveal,
             width,
-            height / 2,
+            height/2,
             0f,
             endRadius
         )
-        va.doOnEnd { group_bottom.isVisible = false }
+        va.doOnEnd { group_bottom.isVisible = false}
         va.start()
     }
 
     fun bindSearchInfo(searchCount: Int = 0, position: Int = 0) {
         if (searchCount == 0) {
-            tv_search_result.text = "Not found"
+            tv_search_result.text = context.getString(R.string.search_text_not_found)
             btn_result_up.isEnabled = false
             btn_result_down.isEnabled = false
-        }else{
+        } else {
             tv_search_result.text = "${position.inc()} of $searchCount"
             btn_result_up.isEnabled = true
             btn_result_down.isEnabled = true
         }
 
-        //lock button presses in min/max positions
-        when(position){
-            0 -> btn_result_up.isEnabled = false
-            searchCount -1 -> btn_result_down.isEnabled = false
+        // lock button presses in min/max positions
+        when(position) {
+            0-> btn_result_up.isEnabled = false
+            searchCount - 1 -> btn_result_down.isEnabled = false
         }
     }
 
     private class SavedState : BaseSavedState, Parcelable {
+        var ssTranslationY: Float = 0f
         var ssIsSearchMode: Boolean = false
 
         constructor(superState: Parcelable?) : super(superState)
 
         constructor(src: Parcel) : super(src) {
+            ssTranslationY = src.readFloat()
             ssIsSearchMode = src.readInt() == 1
         }
 
         override fun writeToParcel(dst: Parcel, flags: Int) {
             super.writeToParcel(dst, flags)
+            dst.writeFloat(ssTranslationY)
             dst.writeInt(if (ssIsSearchMode) 1 else 0)
         }
 

@@ -1,5 +1,3 @@
-@file:Suppress("UNCHECKED_CAST")
-
 package ru.skillbranch.skillarticles.ui.base
 
 import android.os.Bundle
