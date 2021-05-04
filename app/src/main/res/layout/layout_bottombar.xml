@@ -14,7 +14,8 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:background="@color/color_accent" />
 
     <ru.skillbranch.skillarticles.ui.custom.CheckableImageView
         android:id="@+id/btn_bookmark"
@@ -24,7 +25,8 @@
         app:layout_constraintEnd_toStartOf="@+id/btn_share"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/btn_like"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:background="@color/color_accent" />
 
     <ImageView
         android:id="@+id/btn_share"
@@ -34,7 +36,8 @@
         android:src="@drawable/ic_share_black_24dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/btn_bookmark"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:background="@color/color_accent" />
 
     <ru.skillbranch.skillarticles.ui.custom.CheckableImageView
         android:id="@+id/btn_settings"
@@ -42,14 +45,15 @@
         android:src="@drawable/ic_format_size_black_24dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:background="@color/color_accent" />
 
     <androidx.constraintlayout.widget.Group
         android:id="@+id/group_bottom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:constraint_referenced_ids="btn_bookmark,btn_settings,btn_like,btn_share"
-        tools:visibility="gone" />
+        app:constraint_referenced_ids="btn_share,btn_like,btn_bookmark,btn_settings"
+        tools:visibility="gone"/>
 
     <LinearLayout
         android:id="@+id/reveal"
@@ -99,4 +103,5 @@
             tools:tint="@android:color/white"/>
 
     </LinearLayout>
+
 </merge>
